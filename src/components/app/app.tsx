@@ -35,11 +35,7 @@ const App = () => {
     dispatch(checkUserAuth());
   }, []);
   const handleClose = () => {
-    if (backgroundLocation) {
-      navigate(-1);
-    } else {
-      navigate('/');
-    }
+    navigate(-1);
   };
 
   return (
@@ -100,26 +96,26 @@ const App = () => {
         <Route
           path='/feed/:number'
           element={
-            <Modal title='Детали заказа' onClose={handleClose}>
+            <div className={styles.page}>
               <OrderInfo />
-            </Modal>
+            </div>
           }
         />
         <Route
           path='/ingredients/:id'
           element={
-            <Modal title='Детали ингридиента' onClose={handleClose}>
+            <div className={styles.page}>
               <IngredientDetails />
-            </Modal>
+            </div>
           }
         />
         <Route
           path='/profile/orders/:number'
           element={
             <ProtectedRoute>
-              <Modal title='Детали заказа' onClose={handleClose}>
+              <div className={styles.page}>
                 <OrderInfo />
-              </Modal>
+              </div>
             </ProtectedRoute>
           }
         />
