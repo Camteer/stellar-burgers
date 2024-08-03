@@ -3,7 +3,7 @@ import {
   getOrderByNumberApi,
   getOrdersApi,
   orderBurgerApi
-} from '@api';
+} from '../../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
@@ -21,7 +21,7 @@ interface IFeedState {
   orderRequest: boolean;
 }
 
-const initialState: IFeedState = {
+export const initialState: IFeedState = {
   orders: [],
   userOrders: [],
   total: null,
@@ -53,7 +53,10 @@ export const fetchOrderBurgerApi = createAsyncThunk(
 
 export const fetchGetOrderByNumber = createAsyncThunk(
   `${ORDER_SLICE_NAME}/fetchGetOrderByNumber`,
-  async (id: number) => getOrderByNumberApi(id)
+  async (numberOrder: number, { dispatch }) => {
+    dispatch(clearOrderData());
+    return getOrderByNumberApi(numberOrder);
+  }
 );
 
 const oredersSlice = createSlice({
@@ -63,6 +66,7 @@ const oredersSlice = createSlice({
     clearOrderData: (state) => {
       state.orderRequestData = null;
       state.orderRequest = false;
+      state.orderInfo = null;
     }
   },
   selectors: {
@@ -81,6 +85,7 @@ const oredersSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchGetAllOreders.fulfilled, (state, action) => {
+        state.error = null;
         state.isLoading = false;
         state.orders = action.payload.orders;
         state.total = action.payload.total;
@@ -96,6 +101,7 @@ const oredersSlice = createSlice({
       })
       .addCase(fetchGetAllUserOreders.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.error = null;
         state.userOrders = action.payload;
       })
       .addCase(fetchGetAllUserOreders.rejected, (state) => {
@@ -124,7 +130,7 @@ const oredersSlice = createSlice({
       })
       .addCase(fetchGetOrderByNumber.rejected, (state) => {
         state.orderRequest = false;
-        state.error = 'Не удалось oтправить заказ';
+        state.error = 'Не удалось получить заказ';
       });
   }
 });
