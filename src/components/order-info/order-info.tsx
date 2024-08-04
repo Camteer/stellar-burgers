@@ -12,11 +12,11 @@ import {
 import { getIngredienst } from '../../services/slices/ingredientSlice';
 
 export const OrderInfo: FC = () => {
-  const { id } = useParams();
+  const { number } = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
   useEffect(() => {
-    dispatch(fetchGetOrderByNumber(Number(id)));
+    dispatch(fetchGetOrderByNumber(Number(number)));
   }, []);
   /** TODO: взять переменные orderData и ingredients из стора */
   const orderData = useSelector(getOrderInfo);
